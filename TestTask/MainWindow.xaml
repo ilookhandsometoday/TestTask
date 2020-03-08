@@ -7,9 +7,8 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Image x:Name="image" HorizontalAlignment="Left" Height="100" Margin="143,88,0,0" VerticalAlignment="Top" Width="100"/>
-        <Image x:Name="image1" HorizontalAlignment="Left" Height="100" Margin="350,88,0,0" VerticalAlignment="Top" Width="100" RenderTransformOrigin="0.532,-0.203"/>
-        <Image x:Name="image2" HorizontalAlignment="Left" Height="100" Margin="627,88,0,0" VerticalAlignment="Top" Width="100"/>
-
+        <Image x:Name="imageCenter" Height="200" VerticalAlignment="Top" Margin="300,50,293.6,0"/>
+        <Image x:Name="imageLeft" HorizontalAlignment="Left" Height="200" Margin="50,50,0,0" VerticalAlignment="Top" Width="200"/>
+        <Image x:Name="imageRight" HorizontalAlignment="Right" Height="200" Margin="0,50,50,0" VerticalAlignment="Top" Width="200"/>
     </Grid>
 </Window>
