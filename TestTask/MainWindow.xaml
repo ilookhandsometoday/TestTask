@@ -10,8 +10,16 @@
         <Image x:Name="imageCenter" Height="200" VerticalAlignment="Top" Margin="300,50,293.6,0"/>
         <Image x:Name="imageLeft" HorizontalAlignment="Left" Height="200" Margin="50,50,0,0" VerticalAlignment="Top" Width="200"/>
         <Image x:Name="imageRight" HorizontalAlignment="Right" Height="200" Margin="0,50,50,0" VerticalAlignment="Top" Width="200"/>
-        <TextBox x:Name="urlLeft" HorizontalAlignment="Left" Height="23" Margin="50,268,0,0" TextWrapping="Wrap" Text="Введите URL" VerticalAlignment="Top" Width="200"/>
-        <TextBox x:Name="urlCenter" HorizontalAlignment="Left" Height="23" Margin="300,268,0,0" TextWrapping="Wrap" Text="Введите URL" VerticalAlignment="Top" Width="200"/>
-        <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="23" Margin="544,268,0,0" TextWrapping="Wrap" Text="Введите URL" VerticalAlignment="Top" Width="200"/>
+        <TextBox x:Name="textboxURLLeft" HorizontalAlignment="Left" Height="23" Margin="50,268,0,0" TextWrapping="Wrap" Text="Введите URL" VerticalAlignment="Top" Width="200"/>
+        <TextBox x:Name="textboxURLCenter" HorizontalAlignment="Left" Height="23" Margin="300,268,0,0" TextWrapping="Wrap" Text="Введите URL" VerticalAlignment="Top" Width="200"/>
+        <TextBox x:Name="textBoxURLRight" HorizontalAlignment="Left" Height="23" Margin="544,268,0,0" TextWrapping="Wrap" Text="Введите URL" VerticalAlignment="Top" Width="200"/>
+        <Button x:Name="buttonStartCenter" Content="Старт" HorizontalAlignment="Left" Margin="300,314,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="buttonStartRight" Content="Старт" HorizontalAlignment="Left" Margin="544,314,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="buttonStopLeft" Content="Стоп" HorizontalAlignment="Left" Margin="175,314,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="buttonStartLeft" Content="Старт" HorizontalAlignment="Left" Margin="50,314,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="buttonStopCenter" Content="Стоп" HorizontalAlignment="Left" Margin="425,314,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="buttonStopRight" Content="Стоп" HorizontalAlignment="Left" Margin="669,314,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="buttonDownloadAll" Content="Загрузить всё" HorizontalAlignment="Left" Margin="50,356,0,0" VerticalAlignment="Top" Width="694"/>
+        <ProgressBar HorizontalAlignment="Left" Height="10" Margin="50,400,0,0" VerticalAlignment="Top" Width="694"/>
     </Grid>
 </Window>
