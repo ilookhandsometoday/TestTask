@@ -11,17 +11,13 @@ namespace TestTask
 {
     public class Model
     {
-        private HttpClient httpClient;
+        private HttpClient httpClient = new HttpClient();
 
-        public Model() 
-        {
-            this.httpClient = new HttpClient();
-        }
-        public long? GetContentLength(string url)
+        public async Task<long?> GetContentLength(string url)
         {
             HttpRequestMessage head = new HttpRequestMessage(HttpMethod.Head, url);
-            Task<HttpResponseMessage> headResponse = this.httpClient.SendAsync(head);
-            HttpContent content = headResponse.Result.Content;
+            HttpResponseMessage headResponse = await this.httpClient.SendAsync(head);
+            HttpContent content = headResponse.Content;
             long? contentLength = content.Headers.ContentLength;
             return contentLength;
         }
