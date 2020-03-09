@@ -1,6 +1,8 @@
 using NUnit.Framework;
 using TestTask;
 using System.Threading.Tasks;
+using System.IO;
+
 namespace UnitTests
 {
     public class ModelTests
@@ -49,7 +51,8 @@ namespace UnitTests
             model.DownloadImage(url, "whipMeDaddy");
 
             //assert
-            Assert.Pass();
+            FileInfo fI = new FileInfo("whipMeDaddy.jpg");
+            Assert.IsTrue(fI.Exists);
         }
     }
 }
