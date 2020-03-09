@@ -24,7 +24,41 @@ namespace TestTask
             HttpContent content = headResponse.Result.Content;
             long? contentLength = content.Headers.ContentLength;
             return contentLength;
-            //exceptions will be handled globally???
+        }
+
+        public string GetExtension(string url) 
+        {
+            return "." + url.Split(new char[] { '.' }).Last();
+        }
+
+        public async void DownloadImage(string url, string fileName) 
+        {
+            HttpRequestMessage get = new HttpRequestMessage(HttpMethod.Get, url);
+            HttpResponseMessage getResponse = this.httpClient.SendAsync(get, HttpCompletionOption.ResponseHeadersRead).Result;
+            getResponse.EnsureSuccessStatusCode();
+            string fileNameWExtension = fileName + this.GetExtension(url);
+            using (Stream contentStream = await getResponse.Content.ReadAsStreamAsync(), fileStream = new FileStream(fileNameWExtension, FileMode.Create, FileAccess.Write, FileShare.None, 4096, true))
+            {
+                long totalRead = 0L;
+                byte[] buffer = new byte[4096];
+                bool isMoreToRead = true;
+
+                do
+                {
+                    int read = await contentStream.ReadAsync(buffer, 0, buffer.Length);
+                    if (read == 0)
+                    {
+                        isMoreToRead = false;
+                    }
+                    else
+                    {
+                        await fileStream.WriteAsync(buffer, 0, read);
+                        totalRead += read;
+                    }
+                }
+                while (isMoreToRead);
+            }    
+            
         }
     }
 }
