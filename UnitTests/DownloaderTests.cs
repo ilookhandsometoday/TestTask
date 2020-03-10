@@ -5,7 +5,7 @@ using System.IO;
 
 namespace UnitTests
 {
-    public class ModelTests
+    public class DownloaderTests
     {
         [SetUp]
         public void Setup()
@@ -13,14 +13,14 @@ namespace UnitTests
         }
 
         [Test]
-        public void GetContentLength_DogPicture_164005()
+        public async Task GetContentLength_DogPicture_164005()
         {
             //arrange
-            Model model = new Model();
+            Downloader downloader = new Downloader();
             string url = "https://i.pinimg.com/originals/77/a8/d5/77a8d552e2b48c1876cede11a7d89c95.jpg";
 
             //act
-            long? result = model.GetContentLength(url);
+            long? result = await downloader.GetContentLength(url);
 
             //assert
             Assert.AreEqual(result, 164005L);
@@ -30,7 +30,7 @@ namespace UnitTests
         public void GetExtension_DogPicture_jpg() 
         {
             //arrange
-            Model model = new Model();
+            Downloader model = new Downloader();
             string url = "https://i.pinimg.com/originals/77/a8/d5/77a8d552e2b48c1876cede11a7d89c95.jpg";
 
             //act
@@ -41,17 +41,17 @@ namespace UnitTests
         }
 
         [Test]
-        public void DownloadImage_DogPicture_DownloadSuccess() 
+        public async Task DownloadImage_DogPicture_DownloadSuccess() 
         {
             //arrange
-            Model model = new Model();
+            Downloader downloader = new Downloader();
             string url = "https://i.pinimg.com/originals/77/a8/d5/77a8d552e2b48c1876cede11a7d89c95.jpg";
 
             //act
-            model.DownloadImage(url, "whipMeDaddy");
+            string path = await downloader.DownloadImage(url,"test");
 
             //assert
-            FileInfo fI = new FileInfo("whipMeDaddy.jpg");
+            FileInfo fI = new FileInfo(path);
             Assert.IsTrue(fI.Exists);
         }
     }

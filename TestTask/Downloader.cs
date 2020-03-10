@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Drawing;
 using System.IO;
+using System.Web;
 
 namespace TestTask
 {
-    public class Model
+    public class Downloader
     {
         private HttpClient httpClient = new HttpClient();
 
@@ -27,10 +28,10 @@ namespace TestTask
             return "." + url.Split(new char[] { '.' }).Last();
         }
 
-        public async void DownloadImage(string url, string fileName) 
+        public async Task<string> DownloadImage(string url, string fileName) 
         {
             HttpRequestMessage get = new HttpRequestMessage(HttpMethod.Get, url);
-            HttpResponseMessage getResponse = this.httpClient.SendAsync(get, HttpCompletionOption.ResponseHeadersRead).Result;
+            HttpResponseMessage getResponse = await this.httpClient.SendAsync(get, HttpCompletionOption.ResponseHeadersRead);
             getResponse.EnsureSuccessStatusCode();
             string fileNameWExtension = fileName + this.GetExtension(url);
             using (Stream contentStream = await getResponse.Content.ReadAsStreamAsync(), fileStream = new FileStream(fileNameWExtension, FileMode.Create, FileAccess.Write, FileShare.None, 1024, true))
@@ -57,7 +58,9 @@ namespace TestTask
                     }
                 }
                 while (isMoreToRead);
-            }    
+            }
+
+            return fileNameWExtension;
             
         }
     }
