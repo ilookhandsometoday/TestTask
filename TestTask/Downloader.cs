@@ -121,13 +121,20 @@ namespace TestTask
                 while (isMoreToRead && this.State == Downloader.States.Downloading);
             }
 
-            BitmapImage resultingImage = new BitmapImage(new Uri(this.Path, UriKind.Relative));
+            this.Path = Directory.GetCurrentDirectory() + @"\" + this.Path;
+            BitmapImage resultingImage = new BitmapImage(new Uri(this.Path));
+
             this.Path = "";
             this.ExpectedSize = 0;
             this.CurrentSize = 0;
             this.State = Downloader.States.AwaitingDownload;
 
             return resultingImage;
+        }
+
+        public void StopDownload() 
+        {
+            this.State = Downloader.States.AwaitingDownload;
         }
     }
 }

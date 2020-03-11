@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TestTask"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Image Downloader 3000" Height="450" Width="800">
     <Grid>
         <Image x:Name="imageCenter" Height="200" VerticalAlignment="Top" Margin="300,50,293.6,0"/>
         <Image x:Name="imageLeft" HorizontalAlignment="Left" Height="200" Margin="50,50,0,0" VerticalAlignment="Top" Width="200"/>
@@ -13,8 +13,8 @@
         <TextBox x:Name="textBoxURLLeft" HorizontalAlignment="Left" Height="23" Margin="50,268,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" TextChanged="textBoxURLLeft_TextChanged"/>
         <TextBox x:Name="textBoxURLCenter" HorizontalAlignment="Left" Height="23" Margin="300,268,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" TextChanged="textBoxURLCenter_TextChanged"/>
         <TextBox x:Name="textBoxURLRight" HorizontalAlignment="Left" Height="23" Margin="544,268,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" TextChanged="textBoxURLRight_TextChanged"/>
-        <Button x:Name="buttonStartCenter" Content="Старт" HorizontalAlignment="Left" Margin="300,314,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False"/>
-        <Button x:Name="buttonStartRight" Content="Старт" HorizontalAlignment="Left" Margin="544,314,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False"/>
+        <Button x:Name="buttonStartCenter" Content="Старт" HorizontalAlignment="Left" Margin="300,314,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="buttonStartCenter_Click"/>
+        <Button x:Name="buttonStartRight" Content="Старт" HorizontalAlignment="Left" Margin="544,314,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="buttonStartRight_Click"/>
         <Button x:Name="buttonStopLeft" Content="Стоп" HorizontalAlignment="Left" Margin="175,314,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False"/>
         <Button x:Name="buttonStartLeft" Content="Старт" HorizontalAlignment="Left" Margin="50,314,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="buttonStartLeft_Click"/>
         <Button x:Name="buttonStopCenter" Content="Стоп" HorizontalAlignment="Left" Margin="425,314,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False"/>

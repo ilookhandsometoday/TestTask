@@ -125,5 +125,15 @@ namespace TestTask
         {
             await StartDownload(Position.Left, textBoxURLLeft.Text, this.LeftDownloader);
         }
+
+        private async void buttonStartCenter_Click(object sender, RoutedEventArgs e)
+        {
+            await StartDownload(Position.Center, textBoxURLCenter.Text, this.CenterDownloader);
+        }
+
+        private async void buttonStartRight_Click(object sender, RoutedEventArgs e)
+        {
+            await StartDownload(Position.Right, textBoxURLRight.Text, this.RightDownloader);
+        }
     }
 }
