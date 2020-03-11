@@ -32,7 +32,7 @@ namespace TestTask
             Right
         }
 
-        public void EmptyTextBoxPrevention(Position position) 
+        public void PreventNoURLStart(Position position) 
         {
             Button buttonWildCard = new Button();
             TextBox textBoxWildCard = new TextBox();
@@ -64,17 +64,17 @@ namespace TestTask
 
         private void textBoxURLLeft_TextChanged(object sender, TextChangedEventArgs e)
         {
-            EmptyTextBoxPrevention(Position.Left);
+            PreventNoURLStart(Position.Left);
         }
 
         private void textBoxURLCenter_TextChanged(object sender, TextChangedEventArgs e)
         {
-            EmptyTextBoxPrevention(Position.Center);
+            PreventNoURLStart(Position.Center);
         }
 
         private void textBoxURLRight_TextChanged(object sender, TextChangedEventArgs e)
         {
-            EmptyTextBoxPrevention(Position.Right);
+            PreventNoURLStart(Position.Right);
         }
     }
 }
