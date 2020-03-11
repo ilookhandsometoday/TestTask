@@ -42,7 +42,7 @@ namespace TestTask
             this.path = "";
             this.expectedSize = 0;
             this.currentSize = 0;
-            this.state = States.AwaitingDownload;
+            this.state = Downloader.States.AwaitingDownload;
         }
 
         public string Path
@@ -98,32 +98,34 @@ namespace TestTask
             {
                 long totalRead = 0L;
                 bool isMoreToRead = true;
-
-                do
-                {
-                    byte[] buffer = new byte[512]; /*had an issue where with a larger buffer size(4096)
+                int read = 0;
+                byte[] buffer = new byte[512]; /*had an issue where with a larger buffer size(4096)
                 the resulting image would have a lesser than expected size. Decreasing the buffer size seemed to fix the issue. 
                 My guess is that reading from a stream took less time than getting the necessary bytes from the url.
                 It's hard to tell what is the optimal size of the buffer, so I decided on the size of 512 bytes. 
                 Some bugs may still occur if the file is very small.
                 Doesn't seem to have a strong negative effect on performance judging by the completion time of unit tests
                 , although that's very debatable.*/
-                    int read = await contentStream.ReadAsync(buffer, 0, buffer.Length);
-                    if (read == 0)
-                    {
-                        isMoreToRead = false;
-                    }
-                    else
+                this.State = Downloader.States.Downloading;
+                do
+                {
+                    read = await contentStream.ReadAsync(buffer, 0, buffer.Length);
+                    if (read != 0 && this.State != Downloader.States.Paused)
                     {
                         await fileStream.WriteAsync(buffer, 0, read);
                         totalRead += read;
                         this.CurrentSize = totalRead;
                     }
+                    else if (read == 0)
+                    {
+                        isMoreToRead = false;
+                    }
+                    else ;
                 }
-                while (isMoreToRead);
+                while ((isMoreToRead && this.State == Downloader.States.Downloading) || this.State == Downloader.States.Paused);
             }
 
-            this.State = States.AwaitingDownload;
+            this.State = Downloader.States.AwaitingDownload;
 
             return this.Path;
         }
