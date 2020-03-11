@@ -27,8 +27,7 @@ namespace TestTask
         public enum States 
         {
             AwaitingDownload,
-            Downloading,
-            Paused
+            Downloading
         }
         private string path;
         private long? expectedSize;
@@ -108,19 +107,18 @@ namespace TestTask
                 do
                 {
                     read = await contentStream.ReadAsync(buffer, 0, buffer.Length);
-                    if (read != 0 && this.State != Downloader.States.Paused)
+                    if (read != 0)
                     {
                         await fileStream.WriteAsync(buffer, 0, read);
                         totalRead += read;
                         this.CurrentSize = totalRead;
                     }
-                    else if (read == 0)
+                    else
                     {
                         isMoreToRead = false;
                     }
-                    else ;
                 }
-                while ((isMoreToRead && this.State == Downloader.States.Downloading) || this.State == Downloader.States.Paused);
+                while (isMoreToRead && this.State == Downloader.States.Downloading);
             }
 
             this.State = Downloader.States.AwaitingDownload;
