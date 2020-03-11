@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Drawing;
 using System.IO;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
 namespace TestTask
 {
-    public class Downloader: INotifyPropertyChanged //each image will have it's own dedicated downloader
+    public class Downloader
     {
         private static HttpClient httpClient = new HttpClient();
         private static Dictionary<string, string> extensions = new Dictionary<string, string>
@@ -128,12 +126,6 @@ namespace TestTask
             this.State = Downloader.States.AwaitingDownload;
 
             return this.Path;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName]string property = "") 
-        {
-            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
         }
     }
 }
