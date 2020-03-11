@@ -56,18 +56,20 @@ namespace TestTask
             HttpResponseMessage getResponse = await this.httpClient.SendAsync(get, HttpCompletionOption.ResponseHeadersRead);
             getResponse.EnsureSuccessStatusCode();
             string fileNameWExtension = fileName + await this.GetExtension(url);
-            using (Stream contentStream = await getResponse.Content.ReadAsStreamAsync(), fileStream = new FileStream(fileNameWExtension, FileMode.Create, FileAccess.Write, FileShare.None, 1024, true))
+            using (Stream contentStream = await getResponse.Content.ReadAsStreamAsync(), fileStream = new FileStream(fileNameWExtension, FileMode.Create, FileAccess.Write, FileShare.None, 512, true))
             {
                 long totalRead = 0L;
                 bool isMoreToRead = true;
 
                 do
                 {
-                    byte[] buffer = new byte[1]; /*had an issue where with a larger buffer size(4096)
+                    byte[] buffer = new byte[512]; /*had an issue where with a larger buffer size(4096)
                 the resulting image would have a lesser than expected size. Decreasing the buffer size seemed to fix the issue. 
                 My guess is that reading from a stream took less time than getting the necessary bytes from the url.
-                It's hard to tell what is the optimal size of the buffer, so I decided on the lowest size possible.
-                Doesn't seem to have a negative effect on performance judging by the completion time of unit tests.*/
+                It's hard to tell what is the optimal size of the buffer, so I decided on the size of 512 bytes. 
+                Some bugs may still occur if the file is very small.
+                Doesn't seem to have a strong negative effect on performance judging by the completion time of unit tests
+                , although that's very debatable.*/
                     int read = await contentStream.ReadAsync(buffer, 0, buffer.Length);
                     if (read == 0)
                     {
@@ -83,7 +85,6 @@ namespace TestTask
             }
 
             return fileNameWExtension;
-            
         }
     }
 }
