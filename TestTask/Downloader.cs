@@ -10,15 +10,55 @@ using System.Web;
 
 namespace TestTask
 {
-    public class Downloader
+    public class Downloader //each image will have it's own dedicated downloader
     {
-        private HttpClient httpClient;
+        private string path;
+        private int expectedSize;
+        private int currentSize;
+        private bool finishedDownloading;
 
+        public Downloader(string path, int size)
+        {
+            this.path = path;
+            this.expectedSize = size;
+            this.currentSize = 0;
+            this.finishedDownloading = false;
+        }
+
+        public string Path
+        {
+            get { return this.path; }
+            set { this.path = value; }
+        }
+
+        public int Size
+        {
+            get { return this.expectedSize; }
+            set { this.expectedSize = value; }
+        }
+
+        public bool FinishedDownloading
+        {
+            get { return this.finishedDownloading; }
+            set { this.finishedDownloading = value; }
+        }
+
+        public int CurrentSize
+        {
+            get { return this.currentSize; }
+            set { this.currentSize = value; }
+        }
+
+
+        public void UpdateCurrentSize(object sender, DownloadEventArgs e)
+        {
+            this.CurrentSize = e.TotalDownloaded;
+        }
+   
         private Dictionary<string, string> extensions;
 
         public Downloader()
         {
-            this.httpClient = new HttpClient();
             this.extensions = new Dictionary<string, string>
             {
                 {"image/jpeg", ".jpg" },
@@ -32,30 +72,30 @@ namespace TestTask
             };
         }
 
-        public async Task<long?> GetContentLength(string url)
+        public async Task<long?> GetContentLength(string url, HttpClient httpClient)
         {
             HttpRequestMessage head = new HttpRequestMessage(HttpMethod.Head, url);
-            HttpResponseMessage headResponse = await this.httpClient.SendAsync(head);
+            HttpResponseMessage headResponse = await httpClient.SendAsync(head);
             HttpContent content = headResponse.Content;
             long? contentLength = content.Headers.ContentLength;
             return contentLength;
         }
 
-        public async Task<string> GetExtension(string url) 
+        public async Task<string> GetExtension(string url, HttpClient httpClient) 
         {
             HttpRequestMessage head = new HttpRequestMessage(HttpMethod.Head, url);
-            HttpResponseMessage headResponse = await this.httpClient.SendAsync(head);
+            HttpResponseMessage headResponse = await httpClient.SendAsync(head);
             HttpContent content = headResponse.Content;
             string extension = this.extensions[content.Headers.ContentType.MediaType];
             return extension;
         }
 
-        public async Task<string> DownloadImage(string url, string fileName) 
+        public async Task<string> DownloadImage(string url, string fileName, HttpClient httpClient) 
         {
             HttpRequestMessage get = new HttpRequestMessage(HttpMethod.Get, url);
-            HttpResponseMessage getResponse = await this.httpClient.SendAsync(get, HttpCompletionOption.ResponseHeadersRead);
+            HttpResponseMessage getResponse = await httpClient.SendAsync(get, HttpCompletionOption.ResponseHeadersRead);
             getResponse.EnsureSuccessStatusCode();
-            string fileNameWExtension = fileName + await this.GetExtension(url);
+            string fileNameWExtension = fileName + await this.GetExtension(url, httpClient);
             using (Stream contentStream = await getResponse.Content.ReadAsStreamAsync(), fileStream = new FileStream(fileNameWExtension, FileMode.Create, FileAccess.Write, FileShare.None, 512, true))
             {
                 long totalRead = 0L;
@@ -86,5 +126,4 @@ namespace TestTask
 
             return fileNameWExtension;
         }
-    }
 }
