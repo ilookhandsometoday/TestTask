@@ -20,9 +20,16 @@ namespace TestTask
     /// </summary>
     public partial class MainWindow : Window
     {
+        private Downloader LeftDownloader;
+        private Downloader CenterDownloader;
+        private Downloader RightDownloader;
+
         public MainWindow()
         {
             InitializeComponent();
+            this.LeftDownloader = new Downloader();
+            this.CenterDownloader = new Downloader();
+            this.RightDownloader = new Downloader();
         }
 
         public enum Position
@@ -62,19 +69,61 @@ namespace TestTask
             }
         }
 
+        public void PreventNoURLDownloadAll()
+        {
+            if (textBoxURLLeft.Text.Length != 0 && textBoxURLCenter.Text.Length != 0 && textBoxURLRight.Text.Length != 0)
+            {
+                buttonDownloadAll.IsEnabled = true;
+            }
+            else 
+            {
+                buttonDownloadAll.IsEnabled = false;
+            }
+        }
+
+        public async Task StartDownload(Position position, string url, Downloader downloader) 
+        {
+            Image imageWildCard = new Image();
+            string fileName = "";
+            switch (position)
+            {
+                case Position.Left:
+                    imageWildCard = imageLeft;
+                    fileName = "Left";
+                    break;
+                case Position.Center:
+                    imageWildCard = imageCenter;
+                    fileName = "Center";
+                    break;
+                case Position.Right:
+                    imageWildCard = imageRight;
+                    fileName = "Right";
+                    break;
+            }
+            imageWildCard.Source = await downloader.DownloadImage(url, fileName);
+        }
+
         private void textBoxURLLeft_TextChanged(object sender, TextChangedEventArgs e)
         {
             PreventNoURLStart(Position.Left);
+            PreventNoURLDownloadAll();
         }
 
         private void textBoxURLCenter_TextChanged(object sender, TextChangedEventArgs e)
         {
             PreventNoURLStart(Position.Center);
+            PreventNoURLDownloadAll();
         }
 
         private void textBoxURLRight_TextChanged(object sender, TextChangedEventArgs e)
         {
             PreventNoURLStart(Position.Right);
+            PreventNoURLDownloadAll();
+        }
+
+        private async void buttonStartLeft_Click(object sender, RoutedEventArgs e)
+        {
+            await StartDownload(Position.Left, textBoxURLLeft.Text, this.LeftDownloader);
         }
     }
 }

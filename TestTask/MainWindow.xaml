@@ -16,7 +16,7 @@
         <Button x:Name="buttonStartCenter" Content="Старт" HorizontalAlignment="Left" Margin="300,314,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False"/>
         <Button x:Name="buttonStartRight" Content="Старт" HorizontalAlignment="Left" Margin="544,314,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False"/>
         <Button x:Name="buttonStopLeft" Content="Стоп" HorizontalAlignment="Left" Margin="175,314,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False"/>
-        <Button x:Name="buttonStartLeft" Content="Старт" HorizontalAlignment="Left" Margin="50,314,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False"/>
+        <Button x:Name="buttonStartLeft" Content="Старт" HorizontalAlignment="Left" Margin="50,314,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="buttonStartLeft_Click"/>
         <Button x:Name="buttonStopCenter" Content="Стоп" HorizontalAlignment="Left" Margin="425,314,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False"/>
         <Button x:Name="buttonStopRight" Content="Стоп" HorizontalAlignment="Left" Margin="669,314,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False"/>
         <Button x:Name="buttonDownloadAll" Content="Загрузить всё" HorizontalAlignment="Left" Margin="50,356,0,0" VerticalAlignment="Top" Width="694" IsEnabled="False"/>

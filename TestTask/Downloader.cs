@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
-using System.Drawing;
+using System.Windows.Media.Imaging;
 using System.IO;
 
 namespace TestTask
@@ -84,7 +84,7 @@ namespace TestTask
             return extension;
         }
 
-        public async Task<string> DownloadImage(string url, string fileName)
+        public async Task<BitmapImage> DownloadImage(string url, string fileName)
         {
             this.ExpectedSize = await this.GetContentLength(url);
             HttpRequestMessage get = new HttpRequestMessage(HttpMethod.Get, url);
@@ -121,9 +121,13 @@ namespace TestTask
                 while (isMoreToRead && this.State == Downloader.States.Downloading);
             }
 
+            BitmapImage resultingImage = new BitmapImage(new Uri(this.Path, UriKind.Relative));
+            this.Path = "";
+            this.ExpectedSize = 0;
+            this.CurrentSize = 0;
             this.State = Downloader.States.AwaitingDownload;
 
-            return this.Path;
+            return resultingImage;
         }
     }
 }

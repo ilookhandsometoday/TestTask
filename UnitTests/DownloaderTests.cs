@@ -39,20 +39,5 @@ namespace UnitTests
             //assert
             Assert.AreEqual(extension, ".jpg");
         }
-
-        [Test]
-        public async Task DownloadImage_DogPicture_DownloadSuccess() 
-        {
-            //arrange
-            Downloader downloader = new Downloader();
-            string url = "https://i.pinimg.com/originals/77/a8/d5/77a8d552e2b48c1876cede11a7d89c95.jpg";
-
-            //act
-            string path = await downloader.DownloadImage(url, "HelloThere");
-
-            //assert
-            FileInfo fI = new FileInfo(path);
-            Assert.IsTrue(fI.Exists);
-        }
     }
 }
