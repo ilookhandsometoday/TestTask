@@ -12,17 +12,29 @@ namespace TestTask
 {
     public class Downloader //each image will have it's own dedicated downloader
     {
+        private static Dictionary<string, string> extensions = new Dictionary<string, string>
+            {
+                {"image/jpeg", ".jpg" },
+                {"image/bmp", ".bmp" },
+                {"image/gif", ".gif"},
+                {"image/vnd.microsoft.icon", ".ico"},
+                {"image/png", ".png" },
+                {"image/svg+xml", ".svg"},
+                {"image/tiff", ".tiff"},
+                {"image/webp", ".webp"}
+            };
         private string path;
-        private int expectedSize;
-        private int currentSize;
+        private long? expectedSize;
+        private long? currentSize;
         private bool finishedDownloading;
 
-        public Downloader(string path, int size)
+        public Downloader()
         {
-            this.path = path;
-            this.expectedSize = size;
+            this.path = "";
+            this.expectedSize = 0;
             this.currentSize = 0;
             this.finishedDownloading = false;
+
         }
 
         public string Path
@@ -31,7 +43,7 @@ namespace TestTask
             set { this.path = value; }
         }
 
-        public int Size
+        public long? ExpectedSize
         {
             get { return this.expectedSize; }
             set { this.expectedSize = value; }
@@ -43,33 +55,10 @@ namespace TestTask
             set { this.finishedDownloading = value; }
         }
 
-        public int CurrentSize
+        public long? CurrentSize
         {
             get { return this.currentSize; }
             set { this.currentSize = value; }
-        }
-
-
-        public void UpdateCurrentSize(object sender, DownloadEventArgs e)
-        {
-            this.CurrentSize = e.TotalDownloaded;
-        }
-   
-        private Dictionary<string, string> extensions;
-
-        public Downloader()
-        {
-            this.extensions = new Dictionary<string, string>
-            {
-                {"image/jpeg", ".jpg" },
-                {"image/bmp", ".bmp" },
-                {"image/gif", ".gif"},
-                {"image/vnd.microsoft.icon", ".ico"},
-                {"image/png", ".png" },
-                {"image/svg+xml", ".svg"},
-                {"image/tiff", ".tiff"},
-                {"image/webp", ".webp"}
-            };
         }
 
         public async Task<long?> GetContentLength(string url, HttpClient httpClient)
@@ -81,22 +70,23 @@ namespace TestTask
             return contentLength;
         }
 
-        public async Task<string> GetExtension(string url, HttpClient httpClient) 
+        public async Task<string> GetExtension(string url, HttpClient httpClient)
         {
             HttpRequestMessage head = new HttpRequestMessage(HttpMethod.Head, url);
             HttpResponseMessage headResponse = await httpClient.SendAsync(head);
             HttpContent content = headResponse.Content;
-            string extension = this.extensions[content.Headers.ContentType.MediaType];
+            string extension = Downloader.extensions[content.Headers.ContentType.MediaType];
             return extension;
         }
 
-        public async Task<string> DownloadImage(string url, string fileName, HttpClient httpClient) 
+        public async Task<string> DownloadImage(string url, string fileName, HttpClient httpClient)
         {
+            this.ExpectedSize = await this.GetContentLength(url, httpClient);
             HttpRequestMessage get = new HttpRequestMessage(HttpMethod.Get, url);
             HttpResponseMessage getResponse = await httpClient.SendAsync(get, HttpCompletionOption.ResponseHeadersRead);
             getResponse.EnsureSuccessStatusCode();
-            string fileNameWExtension = fileName + await this.GetExtension(url, httpClient);
-            using (Stream contentStream = await getResponse.Content.ReadAsStreamAsync(), fileStream = new FileStream(fileNameWExtension, FileMode.Create, FileAccess.Write, FileShare.None, 512, true))
+            this.Path = fileName + await this.GetExtension(url, httpClient);
+            using (Stream contentStream = await getResponse.Content.ReadAsStreamAsync(), fileStream = new FileStream(this.Path, FileMode.Create, FileAccess.Write, FileShare.None, 512, true))
             {
                 long totalRead = 0L;
                 bool isMoreToRead = true;
@@ -119,11 +109,13 @@ namespace TestTask
                     {
                         await fileStream.WriteAsync(buffer, 0, read);
                         totalRead += read;
+                        this.CurrentSize = totalRead;
                     }
                 }
                 while (isMoreToRead);
             }
 
-            return fileNameWExtension;
+            return this.Path;
         }
+    }
 }
