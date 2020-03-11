@@ -27,14 +27,14 @@ namespace UnitTests
         }
 
         [Test]
-        public void GetExtension_DogPicture_jpg() 
+        public async Task GetExtension_DogPicture_jpg() 
         {
             //arrange
             Downloader model = new Downloader();
             string url = "https://i.pinimg.com/originals/77/a8/d5/77a8d552e2b48c1876cede11a7d89c95.jpg";
 
             //act
-            string extension = model.GetExtension(url);
+            string extension = await model.GetExtension(url);
 
             //assert
             Assert.AreEqual(extension, ".jpg");
@@ -48,7 +48,7 @@ namespace UnitTests
             string url = "https://i.pinimg.com/originals/77/a8/d5/77a8d552e2b48c1876cede11a7d89c95.jpg";
 
             //act
-            string path = await downloader.DownloadImage(url,"test");
+            string path = await downloader.DownloadImage(url, "HelloThere");
 
             //assert
             FileInfo fI = new FileInfo(path);

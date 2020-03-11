@@ -12,7 +12,25 @@ namespace TestTask
 {
     public class Downloader
     {
-        private HttpClient httpClient = new HttpClient();
+        private HttpClient httpClient;
+
+        private Dictionary<string, string> extensions;
+
+        public Downloader()
+        {
+            this.httpClient = new HttpClient();
+            this.extensions = new Dictionary<string, string>
+            {
+                {"image/jpeg", ".jpg" },
+                {"image/bmp", ".bmp" },
+                {"image/gif", ".gif"},
+                {"image/vnd.microsoft.icon", ".ico"},
+                {"image/png", ".png" },
+                {"image/svg+xml", ".svg"},
+                {"image/tiff", ".tiff"},
+                {"image/webp", ".webp"}
+            };
+        }
 
         public async Task<long?> GetContentLength(string url)
         {
@@ -23,9 +41,13 @@ namespace TestTask
             return contentLength;
         }
 
-        public string GetExtension(string url) 
+        public async Task<string> GetExtension(string url) 
         {
-            return "." + url.Split(new char[] { '.' }).Last();
+            HttpRequestMessage head = new HttpRequestMessage(HttpMethod.Head, url);
+            HttpResponseMessage headResponse = await this.httpClient.SendAsync(head);
+            HttpContent content = headResponse.Content;
+            string extension = this.extensions[content.Headers.ContentType.MediaType];
+            return extension;
         }
 
         public async Task<string> DownloadImage(string url, string fileName) 
@@ -33,7 +55,7 @@ namespace TestTask
             HttpRequestMessage get = new HttpRequestMessage(HttpMethod.Get, url);
             HttpResponseMessage getResponse = await this.httpClient.SendAsync(get, HttpCompletionOption.ResponseHeadersRead);
             getResponse.EnsureSuccessStatusCode();
-            string fileNameWExtension = fileName + this.GetExtension(url);
+            string fileNameWExtension = fileName + await this.GetExtension(url);
             using (Stream contentStream = await getResponse.Content.ReadAsStreamAsync(), fileStream = new FileStream(fileNameWExtension, FileMode.Create, FileAccess.Write, FileShare.None, 1024, true))
             {
                 long totalRead = 0L;
