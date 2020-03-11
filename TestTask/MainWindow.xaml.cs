@@ -23,7 +23,58 @@ namespace TestTask
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new ViewModel();
+        }
+
+        public enum Position
+        {
+            Left,
+            Center,
+            Right
+        }
+
+        public void EmptyTextBoxPrevention(Position position) 
+        {
+            Button buttonWildCard = new Button();
+            TextBox textBoxWildCard = new TextBox();
+            switch (position) 
+            {
+                case Position.Left:
+                    textBoxWildCard = textBoxURLLeft;
+                    buttonWildCard = buttonStartLeft;
+                    break;
+                case Position.Center:
+                    textBoxWildCard = textBoxURLCenter;
+                    buttonWildCard = buttonStartCenter;
+                    break;
+                case Position.Right:
+                    textBoxWildCard = textBoxURLRight;
+                    buttonWildCard = buttonStartRight;
+                    break;
+            }
+
+            if (textBoxWildCard.Text.Length != 0)
+            {
+                buttonWildCard.IsEnabled = true;
+            }
+            else
+            {
+                buttonWildCard.IsEnabled = false;
+            }
+        }
+
+        private void textBoxURLLeft_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            EmptyTextBoxPrevention(Position.Left);
+        }
+
+        private void textBoxURLCenter_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            EmptyTextBoxPrevention(Position.Center);
+        }
+
+        private void textBoxURLRight_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            EmptyTextBoxPrevention(Position.Right);
         }
     }
 }

@@ -10,9 +10,9 @@
         <Image x:Name="imageCenter" Height="200" VerticalAlignment="Top" Margin="300,50,293.6,0"/>
         <Image x:Name="imageLeft" HorizontalAlignment="Left" Height="200" Margin="50,50,0,0" VerticalAlignment="Top" Width="200"/>
         <Image x:Name="imageRight" HorizontalAlignment="Right" Height="200" Margin="0,50,50,0" VerticalAlignment="Top" Width="200"/>
-        <TextBox x:Name="textboxURLLeft" HorizontalAlignment="Left" Height="23" Margin="50,268,0,0" TextWrapping="Wrap" Text="Введите URL" VerticalAlignment="Top" Width="200"/>
-        <TextBox x:Name="textboxURLCenter" HorizontalAlignment="Left" Height="23" Margin="300,268,0,0" TextWrapping="Wrap" Text="Введите URL" VerticalAlignment="Top" Width="200"/>
-        <TextBox x:Name="textBoxURLRight" HorizontalAlignment="Left" Height="23" Margin="544,268,0,0" TextWrapping="Wrap" Text="Введите URL" VerticalAlignment="Top" Width="200"/>
+        <TextBox x:Name="textBoxURLLeft" HorizontalAlignment="Left" Height="23" Margin="50,268,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" TextChanged="textBoxURLLeft_TextChanged"/>
+        <TextBox x:Name="textBoxURLCenter" HorizontalAlignment="Left" Height="23" Margin="300,268,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" TextChanged="textBoxURLCenter_TextChanged"/>
+        <TextBox x:Name="textBoxURLRight" HorizontalAlignment="Left" Height="23" Margin="544,268,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" TextChanged="textBoxURLRight_TextChanged"/>
         <Button x:Name="buttonStartCenter" Content="Старт" HorizontalAlignment="Left" Margin="300,314,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False"/>
         <Button x:Name="buttonStartRight" Content="Старт" HorizontalAlignment="Left" Margin="544,314,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False"/>
         <Button x:Name="buttonStopLeft" Content="Стоп" HorizontalAlignment="Left" Margin="175,314,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False"/>
