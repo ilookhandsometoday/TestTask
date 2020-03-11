@@ -8,8 +8,7 @@ using System.Collections.ObjectModel;
 
 namespace TestTask
 {
-    public class ViewModel: INotifyPropertyChanged
+    public class ViewModel/*: INotifyPropertyChanged*/
     {
-        private Image selectedImage;
     }
 }

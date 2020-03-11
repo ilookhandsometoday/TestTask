@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Drawing;
 using System.IO;
-using System.Web;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace TestTask
 {
-    public class Downloader //each image will have it's own dedicated downloader
+    public class Downloader: INotifyPropertyChanged //each image will have it's own dedicated downloader
     {
+        private static HttpClient httpClient = new HttpClient();
         private static Dictionary<string, string> extensions = new Dictionary<string, string>
             {
                 {"image/jpeg", ".jpg" },
@@ -23,18 +25,24 @@ namespace TestTask
                 {"image/tiff", ".tiff"},
                 {"image/webp", ".webp"}
             };
+
+        public enum States 
+        {
+            AwaitingDownload,
+            Downloading,
+            Paused
+        }
         private string path;
         private long? expectedSize;
         private long? currentSize;
-        private bool finishedDownloading;
+        private States state;
 
         public Downloader()
         {
             this.path = "";
             this.expectedSize = 0;
             this.currentSize = 0;
-            this.finishedDownloading = false;
-
+            this.state = States.AwaitingDownload;
         }
 
         public string Path
@@ -49,43 +57,43 @@ namespace TestTask
             set { this.expectedSize = value; }
         }
 
-        public bool FinishedDownloading
-        {
-            get { return this.finishedDownloading; }
-            set { this.finishedDownloading = value; }
-        }
-
         public long? CurrentSize
         {
             get { return this.currentSize; }
             set { this.currentSize = value; }
         }
 
-        public async Task<long?> GetContentLength(string url, HttpClient httpClient)
+        public States State 
+        {
+            get { return this.state; }
+            set { this.state = value; } 
+        }
+
+        public async Task<long?> GetContentLength(string url)
         {
             HttpRequestMessage head = new HttpRequestMessage(HttpMethod.Head, url);
-            HttpResponseMessage headResponse = await httpClient.SendAsync(head);
+            HttpResponseMessage headResponse = await Downloader.httpClient.SendAsync(head);
             HttpContent content = headResponse.Content;
             long? contentLength = content.Headers.ContentLength;
             return contentLength;
         }
 
-        public async Task<string> GetExtension(string url, HttpClient httpClient)
+        public async Task<string> GetExtension(string url)
         {
             HttpRequestMessage head = new HttpRequestMessage(HttpMethod.Head, url);
-            HttpResponseMessage headResponse = await httpClient.SendAsync(head);
+            HttpResponseMessage headResponse = await Downloader.httpClient.SendAsync(head);
             HttpContent content = headResponse.Content;
             string extension = Downloader.extensions[content.Headers.ContentType.MediaType];
             return extension;
         }
 
-        public async Task<string> DownloadImage(string url, string fileName, HttpClient httpClient)
+        public async Task<string> DownloadImage(string url, string fileName)
         {
-            this.ExpectedSize = await this.GetContentLength(url, httpClient);
+            this.ExpectedSize = await this.GetContentLength(url);
             HttpRequestMessage get = new HttpRequestMessage(HttpMethod.Get, url);
-            HttpResponseMessage getResponse = await httpClient.SendAsync(get, HttpCompletionOption.ResponseHeadersRead);
+            HttpResponseMessage getResponse = await Downloader.httpClient.SendAsync(get, HttpCompletionOption.ResponseHeadersRead);
             getResponse.EnsureSuccessStatusCode();
-            this.Path = fileName + await this.GetExtension(url, httpClient);
+            this.Path = fileName + await this.GetExtension(url);
             using (Stream contentStream = await getResponse.Content.ReadAsStreamAsync(), fileStream = new FileStream(this.Path, FileMode.Create, FileAccess.Write, FileShare.None, 512, true))
             {
                 long totalRead = 0L;
@@ -115,7 +123,15 @@ namespace TestTask
                 while (isMoreToRead);
             }
 
+            this.State = States.AwaitingDownload;
+
             return this.Path;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged([CallerMemberName]string property = "") 
+        {
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
         }
     }
 }
