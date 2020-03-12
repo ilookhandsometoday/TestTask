@@ -122,13 +122,16 @@ namespace TestTask
                 while (isMoreToRead && this.State == Downloader.States.Downloading);
             }
 
-            this.Path = Directory.GetCurrentDirectory() + @"\" + this.Path;
-            BitmapImage resultingImage = new BitmapImage();
-           new BitmapImage();
-            resultingImage.BeginInit();
-            resultingImage.UriSource = new Uri(this.Path);
-            resultingImage.CacheOption = BitmapCacheOption.OnLoad;
-            resultingImage.EndInit();
+            BitmapImage resultingImage = null;
+            if (this.State == Downloader.States.Downloading)
+            {
+                resultingImage = new BitmapImage();
+                this.Path = Directory.GetCurrentDirectory() + @"\" + this.Path;
+                resultingImage.BeginInit();
+                resultingImage.UriSource = new Uri(this.Path);
+                resultingImage.CacheOption = BitmapCacheOption.OnLoad;
+                resultingImage.EndInit();
+            }
 
             this.Path = "";
             this.ExpectedSize = 0;

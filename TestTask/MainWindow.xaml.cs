@@ -32,14 +32,14 @@ namespace TestTask
             this.RightDownloader = new Downloader();
         }
 
-        public enum Position
+        private enum Position
         {
             Left,
             Center,
             Right
         }
 
-        public void PreventNoURLStart(Position position) 
+        private void PreventNoURLStart(Position position) 
         {
             Button buttonWildCard = new Button();
             TextBox textBoxWildCard = new TextBox();
@@ -69,7 +69,7 @@ namespace TestTask
             }
         }
 
-        public void PreventNoURLDownloadAll()
+        private void PreventNoURLDownloadAll()
         {
             if (textBoxURLLeft.Text.Length != 0 && textBoxURLCenter.Text.Length != 0 && textBoxURLRight.Text.Length != 0)
             {
@@ -81,7 +81,7 @@ namespace TestTask
             }
         }
 
-        public async Task StartDownload(Position position, string url, Downloader downloader) 
+        private async Task StartDownload(Position position, string url, Downloader downloader) 
         {
             Image imageWildCard = new Image();
             Button stopButtonWildCard = new Button();
@@ -113,6 +113,26 @@ namespace TestTask
             stopButtonWildCard.IsEnabled = true;
             startButtonWildCard.IsEnabled = false;
             imageWildCard.Source = await downloader.DownloadImage(url, fileName);
+            stopButtonWildCard.IsEnabled = false;
+            startButtonWildCard.IsEnabled = true;
+        }
+
+        private void StopDownload(Position position) 
+        {
+            Button stopButtonWildCard = new Button();
+            Button startButtonWildCard = new Button();
+            switch (position)
+            {
+                case Position.Left:
+                    LeftDownloader.StopDownload();
+                    break;
+                case Position.Center:
+                    CenterDownloader.StopDownload();
+                    break;
+                case Position.Right:
+                    RightDownloader.StopDownload();
+                    break;
+            }
             stopButtonWildCard.IsEnabled = false;
             startButtonWildCard.IsEnabled = true;
         }
@@ -152,9 +172,26 @@ namespace TestTask
 
         private void buttonDownloadAll_Click(object sender, RoutedEventArgs e)
         {
+            buttonDownloadAll.IsEnabled = false;
             StartDownload(Position.Left, textBoxURLLeft.Text, this.LeftDownloader);
             StartDownload(Position.Center, textBoxURLCenter.Text, this.CenterDownloader);
             StartDownload(Position.Right, textBoxURLRight.Text, this.RightDownloader);
+            buttonDownloadAll.IsEnabled = true;
+        }
+
+        private void buttonStopLeft_Click(object sender, RoutedEventArgs e)
+        {
+            StopDownload(Position.Left);
+        }
+
+        private void buttonStopCenter_Click(object sender, RoutedEventArgs e)
+        {
+            StopDownload(Position.Center);
+        }
+
+        private void buttonStopRight_Click(object sender, RoutedEventArgs e)
+        {
+            StopDownload(Position.Right);
         }
     }
 }

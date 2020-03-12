@@ -15,10 +15,10 @@
         <TextBox x:Name="textBoxURLRight" HorizontalAlignment="Left" Height="23" Margin="544,268,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" TextChanged="textBoxURLRight_TextChanged"/>
         <Button x:Name="buttonStartCenter" Content="Старт" HorizontalAlignment="Left" Margin="300,314,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="buttonStartCenter_Click"/>
         <Button x:Name="buttonStartRight" Content="Старт" HorizontalAlignment="Left" Margin="544,314,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="buttonStartRight_Click"/>
-        <Button x:Name="buttonStopLeft" Content="Стоп" HorizontalAlignment="Left" Margin="175,314,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False"/>
+        <Button x:Name="buttonStopLeft" Content="Стоп" HorizontalAlignment="Left" Margin="175,314,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="buttonStopLeft_Click"/>
         <Button x:Name="buttonStartLeft" Content="Старт" HorizontalAlignment="Left" Margin="50,314,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="buttonStartLeft_Click"/>
-        <Button x:Name="buttonStopCenter" Content="Стоп" HorizontalAlignment="Left" Margin="425,314,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False"/>
-        <Button x:Name="buttonStopRight" Content="Стоп" HorizontalAlignment="Left" Margin="669,314,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False"/>
+        <Button x:Name="buttonStopCenter" Content="Стоп" HorizontalAlignment="Left" Margin="425,314,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="buttonStopCenter_Click"/>
+        <Button x:Name="buttonStopRight" Content="Стоп" HorizontalAlignment="Left" Margin="669,314,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="buttonStopRight_Click"/>
         <Button x:Name="buttonDownloadAll" Content="Загрузить всё" HorizontalAlignment="Left" Margin="50,356,0,0" VerticalAlignment="Top" Width="694" IsEnabled="False" Click="buttonDownloadAll_Click"/>
         <ProgressBar HorizontalAlignment="Left" Height="10" Margin="50,400,0,0" VerticalAlignment="Top" Width="694"/>
     </Grid>
