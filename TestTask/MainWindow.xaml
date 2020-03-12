@@ -19,7 +19,7 @@
         <Button x:Name="buttonStartLeft" Content="Старт" HorizontalAlignment="Left" Margin="50,314,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="buttonStartLeft_Click"/>
         <Button x:Name="buttonStopCenter" Content="Стоп" HorizontalAlignment="Left" Margin="425,314,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False"/>
         <Button x:Name="buttonStopRight" Content="Стоп" HorizontalAlignment="Left" Margin="669,314,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False"/>
-        <Button x:Name="buttonDownloadAll" Content="Загрузить всё" HorizontalAlignment="Left" Margin="50,356,0,0" VerticalAlignment="Top" Width="694" IsEnabled="False"/>
+        <Button x:Name="buttonDownloadAll" Content="Загрузить всё" HorizontalAlignment="Left" Margin="50,356,0,0" VerticalAlignment="Top" Width="694" IsEnabled="False" Click="buttonDownloadAll_Click"/>
         <ProgressBar HorizontalAlignment="Left" Height="10" Margin="50,400,0,0" VerticalAlignment="Top" Width="694"/>
     </Grid>
 </Window>

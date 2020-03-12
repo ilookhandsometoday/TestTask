@@ -84,22 +84,32 @@ namespace TestTask
         public async Task StartDownload(Position position, string url, Downloader downloader) 
         {
             Image imageWildCard = new Image();
+            Button stopButtonWildCard = new Button();
+            Button startButtonWildCard = new Button();
             string fileName = "";
             switch (position)
             {
                 case Position.Left:
                     imageWildCard = imageLeft;
+                    stopButtonWildCard = buttonStopLeft;
+                    startButtonWildCard = buttonStartLeft;
                     fileName = "Left";
                     break;
                 case Position.Center:
                     imageWildCard = imageCenter;
+                    stopButtonWildCard = buttonStopCenter;
+                    startButtonWildCard = buttonStartCenter;
                     fileName = "Center";
                     break;
                 case Position.Right:
                     imageWildCard = imageRight;
+                    stopButtonWildCard = buttonStopRight;
+                    startButtonWildCard = buttonStartRight;
                     fileName = "Right";
                     break;
             }
+            stopButtonWildCard.IsEnabled = true;
+            startButtonWildCard.IsEnabled = false;
             imageWildCard.Source = await downloader.DownloadImage(url, fileName);
         }
 
@@ -134,6 +144,13 @@ namespace TestTask
         private async void buttonStartRight_Click(object sender, RoutedEventArgs e)
         {
             await StartDownload(Position.Right, textBoxURLRight.Text, this.RightDownloader);
+        }
+
+        private async void buttonDownloadAll_Click(object sender, RoutedEventArgs e)
+        {
+            StartDownload(Position.Left, textBoxURLLeft.Text, this.LeftDownloader);
+            StartDownload(Position.Center, textBoxURLCenter.Text, this.CenterDownloader);
+            StartDownload(Position.Right, textBoxURLRight.Text, this.RightDownloader);
         }
     }
 }

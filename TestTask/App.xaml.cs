@@ -14,9 +14,9 @@ namespace TestTask
     /// </summary>
     public partial class App : Application
     {
-        void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e) 
-        {
-            MessageBox.Show(e.Exception.Message);
+        private void Application_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {            
+            MessageBox.Show(e.Exception.Message, "Exception Caught", MessageBoxButton.OK, MessageBoxImage.Error);
             e.Handled = true;
         }
     }
