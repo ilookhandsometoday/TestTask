@@ -39,5 +39,7 @@ namespace UnitTests
             //assert
             Assert.AreEqual(extension, ".jpg");
         }
+
+        //no DownloadImage unit test because I had some problems with System.Windows.Media.Imaging namespace
     }
 }
