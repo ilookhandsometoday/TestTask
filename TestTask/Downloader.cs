@@ -92,18 +92,18 @@ namespace TestTask
             HttpResponseMessage getResponse = await this.httpClient.SendAsync(get, HttpCompletionOption.ResponseHeadersRead);
             getResponse.EnsureSuccessStatusCode();
             this.Path = fileName + await this.GetExtension(url);
-            using (Stream contentStream = await getResponse.Content.ReadAsStreamAsync(), fileStream = new FileStream(this.Path, FileMode.Create, FileAccess.Write, FileShare.None, 512, true))
+            int bufferSize = 1024;
+            using (Stream contentStream = await getResponse.Content.ReadAsStreamAsync())
+            using (FileStream fileStream = new FileStream(this.Path, FileMode.Create, FileAccess.Write, FileShare.None, bufferSize, true))
             {
                 long totalRead = 0L;
                 bool isMoreToRead = true;
                 int read = 0;
-                byte[] buffer = new byte[512]; /*had an issue where with a larger buffer size(4096)
+                byte[] buffer = new byte[bufferSize]; /*had an issue where with a larger buffer size(4096)
                 the resulting image would have a lesser than expected size. Decreasing the buffer size seemed to fix the issue. 
                 My guess is that reading from a stream took less time than getting the necessary bytes from the url.
-                It's hard to tell what is the optimal size of the buffer, so I decided on the size of 512 bytes. 
-                Some bugs may still occur if the file is very small.
-                Doesn't seem to have a strong negative effect on performance judging by the completion time of unit tests
-                , although that's very debatable.*/
+                It's hard to tell what is the optimal size of the buffer, so I decided on the size of 1024 bytes. 
+                Something bad still might happen if the file is too small*/
                 this.State = Downloader.States.Downloading;
                 do
                 {
@@ -123,7 +123,12 @@ namespace TestTask
             }
 
             this.Path = Directory.GetCurrentDirectory() + @"\" + this.Path;
-            BitmapImage resultingImage = new BitmapImage(new Uri(this.Path));
+            BitmapImage resultingImage = new BitmapImage();
+           new BitmapImage();
+            resultingImage.BeginInit();
+            resultingImage.UriSource = new Uri(this.Path);
+            resultingImage.CacheOption = BitmapCacheOption.OnLoad;
+            resultingImage.EndInit();
 
             this.Path = "";
             this.ExpectedSize = 0;

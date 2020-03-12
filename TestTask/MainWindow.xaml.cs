@@ -108,9 +108,13 @@ namespace TestTask
                     fileName = "Right";
                     break;
             }
+
+            imageWildCard.Source = null;
             stopButtonWildCard.IsEnabled = true;
             startButtonWildCard.IsEnabled = false;
             imageWildCard.Source = await downloader.DownloadImage(url, fileName);
+            stopButtonWildCard.IsEnabled = false;
+            startButtonWildCard.IsEnabled = true;
         }
 
         private void textBoxURLLeft_TextChanged(object sender, TextChangedEventArgs e)
@@ -133,20 +137,20 @@ namespace TestTask
 
         private async void buttonStartLeft_Click(object sender, RoutedEventArgs e)
         {
-            StartDownload(Position.Left, textBoxURLLeft.Text, this.LeftDownloader);
+            await StartDownload(Position.Left, textBoxURLLeft.Text, this.LeftDownloader);
         }
 
         private async void buttonStartCenter_Click(object sender, RoutedEventArgs e)
         {
-            StartDownload(Position.Center, textBoxURLCenter.Text, this.CenterDownloader);
+           await StartDownload(Position.Center, textBoxURLCenter.Text, this.CenterDownloader);
         }
 
         private async void buttonStartRight_Click(object sender, RoutedEventArgs e)
         {
-            StartDownload(Position.Right, textBoxURLRight.Text, this.RightDownloader);
+            await StartDownload(Position.Right, textBoxURLRight.Text, this.RightDownloader);
         }
 
-        private async void buttonDownloadAll_Click(object sender, RoutedEventArgs e)
+        private void buttonDownloadAll_Click(object sender, RoutedEventArgs e)
         {
             StartDownload(Position.Left, textBoxURLLeft.Text, this.LeftDownloader);
             StartDownload(Position.Center, textBoxURLCenter.Text, this.CenterDownloader);
