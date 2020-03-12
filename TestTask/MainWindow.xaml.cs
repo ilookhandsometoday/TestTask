@@ -176,7 +176,6 @@ namespace TestTask
             StartDownload(Position.Left, textBoxURLLeft.Text, this.LeftDownloader);
             StartDownload(Position.Center, textBoxURLCenter.Text, this.CenterDownloader);
             StartDownload(Position.Right, textBoxURLRight.Text, this.RightDownloader);
-            buttonDownloadAll.IsEnabled = true;
         }
 
         private void buttonStopLeft_Click(object sender, RoutedEventArgs e)
