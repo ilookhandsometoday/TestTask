@@ -11,7 +11,7 @@ namespace TestTask
 {
     public class Downloader
     {
-        private static HttpClient httpClient = new HttpClient();
+        private HttpClient httpClient;
         private static Dictionary<string, string> extensions = new Dictionary<string, string>
             {
                 {"image/jpeg", ".jpg" },
@@ -40,6 +40,7 @@ namespace TestTask
             this.expectedSize = 0;
             this.currentSize = 0;
             this.state = Downloader.States.AwaitingDownload;
+            this.httpClient = new HttpClient();
         }
 
         public string Path
@@ -69,7 +70,7 @@ namespace TestTask
         public async Task<long?> GetContentLength(string url)
         {
             HttpRequestMessage head = new HttpRequestMessage(HttpMethod.Head, url);
-            HttpResponseMessage headResponse = await Downloader.httpClient.SendAsync(head);
+            HttpResponseMessage headResponse = await this.httpClient.SendAsync(head);
             HttpContent content = headResponse.Content;
             long? contentLength = content.Headers.ContentLength;
             return contentLength;
@@ -78,7 +79,7 @@ namespace TestTask
         public async Task<string> GetExtension(string url)
         {
             HttpRequestMessage head = new HttpRequestMessage(HttpMethod.Head, url);
-            HttpResponseMessage headResponse = await Downloader.httpClient.SendAsync(head);
+            HttpResponseMessage headResponse = await this.httpClient.SendAsync(head);
             HttpContent content = headResponse.Content;
             string extension = Downloader.extensions[content.Headers.ContentType.MediaType];
             return extension;
@@ -88,7 +89,7 @@ namespace TestTask
         {
             this.ExpectedSize = await this.GetContentLength(url);
             HttpRequestMessage get = new HttpRequestMessage(HttpMethod.Get, url);
-            HttpResponseMessage getResponse = await Downloader.httpClient.SendAsync(get, HttpCompletionOption.ResponseHeadersRead);
+            HttpResponseMessage getResponse = await this.httpClient.SendAsync(get, HttpCompletionOption.ResponseHeadersRead);
             getResponse.EnsureSuccessStatusCode();
             this.Path = fileName + await this.GetExtension(url);
             using (Stream contentStream = await getResponse.Content.ReadAsStreamAsync(), fileStream = new FileStream(this.Path, FileMode.Create, FileAccess.Write, FileShare.None, 512, true))

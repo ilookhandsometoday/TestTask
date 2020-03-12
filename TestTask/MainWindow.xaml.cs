@@ -133,17 +133,17 @@ namespace TestTask
 
         private async void buttonStartLeft_Click(object sender, RoutedEventArgs e)
         {
-            await StartDownload(Position.Left, textBoxURLLeft.Text, this.LeftDownloader);
+            StartDownload(Position.Left, textBoxURLLeft.Text, this.LeftDownloader);
         }
 
         private async void buttonStartCenter_Click(object sender, RoutedEventArgs e)
         {
-            await StartDownload(Position.Center, textBoxURLCenter.Text, this.CenterDownloader);
+            StartDownload(Position.Center, textBoxURLCenter.Text, this.CenterDownloader);
         }
 
         private async void buttonStartRight_Click(object sender, RoutedEventArgs e)
         {
-            await StartDownload(Position.Right, textBoxURLRight.Text, this.RightDownloader);
+            StartDownload(Position.Right, textBoxURLRight.Text, this.RightDownloader);
         }
 
         private async void buttonDownloadAll_Click(object sender, RoutedEventArgs e)
