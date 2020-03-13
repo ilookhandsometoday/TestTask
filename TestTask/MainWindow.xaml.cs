@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -12,8 +13,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Windows.Automation.Peers;
-using System.Windows.Automation.Provider;
 
 namespace TestTask
 {
@@ -125,20 +124,8 @@ namespace TestTask
             {
                 buttonDownloadAll.IsEnabled = true;
                 PreventNoURLDownloadAll();
+                PreventNoURLStart(position);
             }
-        }
-
-        private void DownloadAll() 
-        {
-            ButtonAutomationPeer peerLeft = new ButtonAutomationPeer(buttonStartLeft);
-            ButtonAutomationPeer peerCenter = new ButtonAutomationPeer(buttonStartCenter);
-            ButtonAutomationPeer peerRight = new ButtonAutomationPeer(buttonStartRight);
-            IInvokeProvider invokeProvLeft = peerLeft.GetPattern(PatternInterface.Invoke) as IInvokeProvider;
-            IInvokeProvider invokeProvCenter = peerCenter.GetPattern(PatternInterface.Invoke) as IInvokeProvider;
-            IInvokeProvider invokeProvRight = peerRight.GetPattern(PatternInterface.Invoke) as IInvokeProvider;
-            invokeProvLeft.Invoke();
-            invokeProvCenter.Invoke();
-            invokeProvRight.Invoke();
         }
 
         private void StopDownload(Position position)
@@ -157,6 +144,7 @@ namespace TestTask
                     RightDownloader.StopDownload();
                     break;
             }
+
             stopButtonWildCard.IsEnabled = false;
             startButtonWildCard.IsEnabled = true;
         }
@@ -179,24 +167,30 @@ namespace TestTask
             PreventNoURLDownloadAll();
         }
 
-        private async void buttonStartLeft_Click(object sender, RoutedEventArgs e)
+        private void buttonStartLeft_Click(object sender, RoutedEventArgs e)
         {
-            await StartDownload(Position.Left, textBoxURLLeft.Text, this.LeftDownloader);
+            StartDownload(Position.Left, textBoxURLLeft.Text, this.LeftDownloader);
+            MessageBox.Show("Внимание! Загрузка начнется через несколько секунд. Во время ожидания начала загрузки кнопка \"Стоп\" может не отвечать на клики.");
         }
 
-        private async void buttonStartCenter_Click(object sender, RoutedEventArgs e)
+        private void buttonStartCenter_Click(object sender, RoutedEventArgs e)
         {
-            await StartDownload(Position.Center, textBoxURLCenter.Text, this.CenterDownloader);
+            StartDownload(Position.Center, textBoxURLCenter.Text, this.CenterDownloader);
+            MessageBox.Show("Внимание! Загрузка начнется через несколько секунд. Во время ожидания начала загрузки кнопка \"Стоп\" может не отвечать на клики.");
         }
 
-        private async void buttonStartRight_Click(object sender, RoutedEventArgs e)
+        private void buttonStartRight_Click(object sender, RoutedEventArgs e)
         {
-            await StartDownload(Position.Right, textBoxURLRight.Text, this.RightDownloader);
+            StartDownload(Position.Right, textBoxURLRight.Text, this.RightDownloader);
+            MessageBox.Show("Внимание! Загрузка начнется через несколько секунд. Во время ожидания начала загрузки кнопка \"Стоп\" может не отвечать на клики.");
         }
 
         private void buttonDownloadAll_Click(object sender, RoutedEventArgs e)
         {
-            DownloadAll();
+            StartDownload(Position.Left, textBoxURLLeft.Text, this.LeftDownloader);
+            StartDownload(Position.Center, textBoxURLCenter.Text, this.CenterDownloader);
+            StartDownload(Position.Right, textBoxURLRight.Text, this.RightDownloader);
+            MessageBox.Show("Внимание! Загрузка начнется через несколько секунд. Во время ожидания начала загрузки кнопки \"Стоп\" может не отвечать на клики.");
         }
 
         private void buttonStopLeft_Click(object sender, RoutedEventArgs e)
