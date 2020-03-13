@@ -109,12 +109,20 @@ namespace TestTask
                     break;
             }
 
+            
             imageWildCard.Source = null;
+            buttonDownloadAll.IsEnabled = false;
             stopButtonWildCard.IsEnabled = true;
             startButtonWildCard.IsEnabled = false;
             imageWildCard.Source = await downloader.DownloadImage(url, fileName);
             stopButtonWildCard.IsEnabled = false;
             startButtonWildCard.IsEnabled = true;
+            if (LeftDownloader.State == Downloader.States.AwaitingDownload &&
+                CenterDownloader.State == Downloader.States.AwaitingDownload &&
+                RightDownloader.State == Downloader.States.AwaitingDownload)
+            {
+                buttonDownloadAll.IsEnabled = true;
+            }
         }
 
         private void StopDownload(Position position) 
@@ -172,7 +180,6 @@ namespace TestTask
 
         private void buttonDownloadAll_Click(object sender, RoutedEventArgs e)
         {
-            buttonDownloadAll.IsEnabled = false;
             StartDownload(Position.Left, textBoxURLLeft.Text, this.LeftDownloader);
             StartDownload(Position.Center, textBoxURLCenter.Text, this.CenterDownloader);
             StartDownload(Position.Right, textBoxURLRight.Text, this.RightDownloader);
