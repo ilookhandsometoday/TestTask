@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.ComponentModel;
 
 namespace TestTask
 {
@@ -23,7 +25,7 @@ namespace TestTask
         private Downloader LeftDownloader;
         private Downloader CenterDownloader;
         private Downloader RightDownloader;
-        private Progress<double> Progress;
+        private BackgroundWorker BackgroundWorker;
 
         public MainWindow()
         {
@@ -31,35 +33,41 @@ namespace TestTask
             this.LeftDownloader = new Downloader();
             this.CenterDownloader = new Downloader();
             this.RightDownloader = new Downloader();
-            this.Progress = new Progress<double>(value => progressBar.Value = value);
+            this.BackgroundWorker = new BackgroundWorker();
+            this.BackgroundWorker.WorkerReportsProgress = true;
+            this.BackgroundWorker.DoWork += BackgroundWorker_DoWork;
+            this.BackgroundWorker.ProgressChanged += BackgroundWorker_ProgressChanged;
             MessageBox.Show("Внимание! После нажатия кнопки \"Старт\"  или \"Загрузить всё\" проходит несколько секунд " +
                 "прежде чем загрузка действительно начнется. В это время кнопки \"Стоп\" будут неотзывчивыми");
+            this.BackgroundWorker.RunWorkerAsync();
         }
 
-        private async Task UpdateProgressBar()
+        private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e) 
         {
-            do
+            int percentageValue = 0;
+            while (true)
             {
-                await Task.Run(() =>
+                if (LeftDownloader.ExpectedSize != 0
+                || CenterDownloader.ExpectedSize != 0
+                || RightDownloader.ExpectedSize != 0)
                 {
-
-                    if (LeftDownloader.State == Downloader.States.Downloading
-                    || CenterDownloader.State == Downloader.States.Downloading
-                    || RightDownloader.State == Downloader.States.Downloading)
-                    {
-                        double percentageValue = Convert.ToDouble
-                        (LeftDownloader.CurrentSize
-                        + CenterDownloader.CurrentSize
-                        + RightDownloader.CurrentSize)
-                        / Convert.ToDouble
-                        (LeftDownloader.ExpectedSize
-                        + CenterDownloader.ExpectedSize
-                        + RightDownloader.ExpectedSize) * 100L;
-                        ((IProgress<double>)Progress).Report(percentageValue);
-                    }
+                    percentageValue = Convert.ToInt32
+                    ((LeftDownloader.CurrentSize
+                    + CenterDownloader.CurrentSize
+                    + RightDownloader.CurrentSize) 
+                    * 100L
+                    / (LeftDownloader.ExpectedSize
+                    + CenterDownloader.ExpectedSize
+                    + RightDownloader.ExpectedSize));
+                    this.BackgroundWorker.ReportProgress(percentageValue);
+                    Thread.Sleep(700);
                 }
-                );
-            } while (true);
+            }
+        }
+
+        private void BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e) 
+        {
+            progressBar.Value = e.ProgressPercentage;
         }
 
         private void PreventNoURLStart(TextBox textBox, Button startButton)
@@ -96,10 +104,6 @@ namespace TestTask
             RightDownloader.State == Downloader.States.AwaitingDownload;
             PreventNoURLStart(textBox, startButton );
             PreventNoURLDownloadAll();
-        }
-
-        private void StopDownload(Button stopButton, Button startButton, Downloader downloader)
-        {
         }
 
         private void textBoxURLLeft_TextChanged(object sender, TextChangedEventArgs e)
