@@ -87,6 +87,7 @@ namespace TestTask
 
         public async Task<BitmapImage> DownloadImage(string url, string fileName)//it takes a few seconds before the download ACTUALLY starts
         {
+            this.CurrentSize = 0L;
             this.ExpectedSize = await this.GetContentLength(url);
             HttpRequestMessage get = new HttpRequestMessage(HttpMethod.Get, url);
             HttpResponseMessage getResponse = await this.httpClient.SendAsync(get, HttpCompletionOption.ResponseHeadersRead);

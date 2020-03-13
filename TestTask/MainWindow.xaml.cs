@@ -27,11 +27,11 @@ namespace TestTask
         public MainWindow()
         {
             InitializeComponent();
-            MessageBox.Show("Внимание! После нажатия кнопки \"Старт\"  или \"Загрузить всё\" проходит несколько секунд " +
-                "прежде чем загрузка действительно начнется. В это время кнопки \"Стоп\" будут неотзывчивыми");
             this.LeftDownloader = new Downloader();
             this.CenterDownloader = new Downloader();
             this.RightDownloader = new Downloader();
+            MessageBox.Show("Внимание! После нажатия кнопки \"Старт\"  или \"Загрузить всё\" проходит несколько секунд " +
+                "прежде чем загрузка действительно начнется. В это время кнопки \"Стоп\" будут неотзывчивыми");
         }
 
         private enum Position
