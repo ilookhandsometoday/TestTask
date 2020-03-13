@@ -132,10 +132,7 @@ namespace TestTask
                 resultingImage.CacheOption = BitmapCacheOption.OnLoad;
                 resultingImage.EndInit();
             }
-
-            this.Path = "";
-            this.ExpectedSize = 0;
-            this.CurrentSize = 0;
+            
             this.State = Downloader.States.AwaitingDownload;
 
             return resultingImage;

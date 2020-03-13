@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Automation.Peers;
+using System.Windows.Automation.Provider;
 
 namespace TestTask
 {
@@ -39,11 +41,11 @@ namespace TestTask
             Right
         }
 
-        private void PreventNoURLStart(Position position) 
+        private void PreventNoURLStart(Position position)
         {
             Button buttonWildCard = new Button();
             TextBox textBoxWildCard = new TextBox();
-            switch (position) 
+            switch (position)
             {
                 case Position.Left:
                     textBoxWildCard = textBoxURLLeft;
@@ -75,13 +77,13 @@ namespace TestTask
             {
                 buttonDownloadAll.IsEnabled = true;
             }
-            else 
+            else
             {
                 buttonDownloadAll.IsEnabled = false;
             }
         }
 
-        private async Task StartDownload(Position position, string url, Downloader downloader) 
+        private async Task StartDownload(Position position, string url, Downloader downloader)
         {
             Image imageWildCard = new Image();
             Button stopButtonWildCard = new Button();
@@ -109,7 +111,7 @@ namespace TestTask
                     break;
             }
 
-            
+
             imageWildCard.Source = null;
             buttonDownloadAll.IsEnabled = false;
             stopButtonWildCard.IsEnabled = true;
@@ -125,7 +127,20 @@ namespace TestTask
             }
         }
 
-        private void StopDownload(Position position) 
+        private void DownloadAll() 
+        {
+            ButtonAutomationPeer peerLeft = new ButtonAutomationPeer(buttonStartLeft);
+            ButtonAutomationPeer peerCenter = new ButtonAutomationPeer(buttonStartCenter);
+            ButtonAutomationPeer peerRight = new ButtonAutomationPeer(buttonStartRight);
+            IInvokeProvider invokeProvLeft = peerLeft.GetPattern(PatternInterface.Invoke) as IInvokeProvider;
+            IInvokeProvider invokeProvCenter = peerCenter.GetPattern(PatternInterface.Invoke) as IInvokeProvider;
+            IInvokeProvider invokeProvRight = peerRight.GetPattern(PatternInterface.Invoke) as IInvokeProvider;
+            invokeProvLeft.Invoke();
+            invokeProvCenter.Invoke();
+            invokeProvRight.Invoke();
+        }
+
+        private void StopDownload(Position position)
         {
             Button stopButtonWildCard = new Button();
             Button startButtonWildCard = new Button();
@@ -170,7 +185,7 @@ namespace TestTask
 
         private async void buttonStartCenter_Click(object sender, RoutedEventArgs e)
         {
-           await StartDownload(Position.Center, textBoxURLCenter.Text, this.CenterDownloader);
+            await StartDownload(Position.Center, textBoxURLCenter.Text, this.CenterDownloader);
         }
 
         private async void buttonStartRight_Click(object sender, RoutedEventArgs e)
@@ -180,9 +195,7 @@ namespace TestTask
 
         private void buttonDownloadAll_Click(object sender, RoutedEventArgs e)
         {
-            StartDownload(Position.Left, textBoxURLLeft.Text, this.LeftDownloader);
-            StartDownload(Position.Center, textBoxURLCenter.Text, this.CenterDownloader);
-            StartDownload(Position.Right, textBoxURLRight.Text, this.RightDownloader);
+            DownloadAll();
         }
 
         private void buttonStopLeft_Click(object sender, RoutedEventArgs e)
