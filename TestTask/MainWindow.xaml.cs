@@ -124,6 +124,7 @@ namespace TestTask
                 RightDownloader.State == Downloader.States.AwaitingDownload)
             {
                 buttonDownloadAll.IsEnabled = true;
+                PreventNoURLDownloadAll();
             }
         }
 
