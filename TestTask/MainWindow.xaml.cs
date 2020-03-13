@@ -27,6 +27,8 @@ namespace TestTask
         public MainWindow()
         {
             InitializeComponent();
+            MessageBox.Show("Внимание! После нажатия кнопки \"Старт\"  или \"Загрузить всё\" проходит несколько секунд " +
+                "прежде чем загрузка действительно начнется. В это время кнопки \"Стоп\" будут неотзывчивыми");
             this.LeftDownloader = new Downloader();
             this.CenterDownloader = new Downloader();
             this.RightDownloader = new Downloader();
@@ -59,26 +61,12 @@ namespace TestTask
                     break;
             }
 
-            if (textBoxWildCard.Text.Length != 0)
-            {
-                buttonWildCard.IsEnabled = true;
-            }
-            else
-            {
-                buttonWildCard.IsEnabled = false;
-            }
+            buttonWildCard.IsEnabled = textBoxWildCard.Text.Length != 0;
         }
 
         private void PreventNoURLDownloadAll()
         {
-            if (textBoxURLLeft.Text.Length != 0 && textBoxURLCenter.Text.Length != 0 && textBoxURLRight.Text.Length != 0)
-            {
-                buttonDownloadAll.IsEnabled = true;
-            }
-            else
-            {
-                buttonDownloadAll.IsEnabled = false;
-            }
+            buttonDownloadAll.IsEnabled = textBoxURLLeft.Text.Length != 0 && textBoxURLCenter.Text.Length != 0 && textBoxURLRight.Text.Length != 0;
         }
 
         private async Task StartDownload(Position position, string url, Downloader downloader)
@@ -114,17 +102,24 @@ namespace TestTask
             buttonDownloadAll.IsEnabled = false;
             stopButtonWildCard.IsEnabled = true;
             startButtonWildCard.IsEnabled = false;
-            imageWildCard.Source = await downloader.DownloadImage(url, fileName);
+            try
+            {
+                imageWildCard.Source = await downloader.DownloadImage(url, fileName);
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show(e.Message);
+                imageWildCard.Source = null;
+            }
+
+            
             stopButtonWildCard.IsEnabled = false;
             startButtonWildCard.IsEnabled = true;
-            if (LeftDownloader.State == Downloader.States.AwaitingDownload &&
-                CenterDownloader.State == Downloader.States.AwaitingDownload &&
-                RightDownloader.State == Downloader.States.AwaitingDownload)
-            {
-                buttonDownloadAll.IsEnabled = true;
-                PreventNoURLDownloadAll();
-                PreventNoURLStart(position);
-            }
+            PreventNoURLStart(position);
+            PreventNoURLDownloadAll();
+            buttonDownloadAll.IsEnabled = LeftDownloader.State == Downloader.States.AwaitingDownload &&
+            CenterDownloader.State == Downloader.States.AwaitingDownload &&
+            RightDownloader.State == Downloader.States.AwaitingDownload;
         }
 
         private void StopDownload(Position position)
@@ -169,19 +164,16 @@ namespace TestTask
         private void buttonStartLeft_Click(object sender, RoutedEventArgs e)
         {
             StartDownload(Position.Left, textBoxURLLeft.Text, this.LeftDownloader);
-            MessageBox.Show("Внимание! Загрузка начнется через несколько секунд. Во время ожидания начала загрузки кнопка \"Стоп\" может не отвечать на клики.");
         }
 
         private void buttonStartCenter_Click(object sender, RoutedEventArgs e)
         {
             StartDownload(Position.Center, textBoxURLCenter.Text, this.CenterDownloader);
-            MessageBox.Show("Внимание! Загрузка начнется через несколько секунд. Во время ожидания начала загрузки кнопка \"Стоп\" может не отвечать на клики.");
         }
 
         private void buttonStartRight_Click(object sender, RoutedEventArgs e)
         {
             StartDownload(Position.Right, textBoxURLRight.Text, this.RightDownloader);
-            MessageBox.Show("Внимание! Загрузка начнется через несколько секунд. Во время ожидания начала загрузки кнопка \"Стоп\" может не отвечать на клики.");
         }
 
         private void buttonDownloadAll_Click(object sender, RoutedEventArgs e)
@@ -189,7 +181,6 @@ namespace TestTask
             StartDownload(Position.Left, textBoxURLLeft.Text, this.LeftDownloader);
             StartDownload(Position.Center, textBoxURLCenter.Text, this.CenterDownloader);
             StartDownload(Position.Right, textBoxURLRight.Text, this.RightDownloader);
-            MessageBox.Show("Внимание! Загрузка начнется через несколько секунд. Во время ожидания начала загрузки кнопки \"Стоп\" может не отвечать на клики.");
         }
         //not awaiting async methods is SO wrong, but I don't think I can do anything about it
 
