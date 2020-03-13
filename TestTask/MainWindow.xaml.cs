@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -192,6 +191,7 @@ namespace TestTask
             StartDownload(Position.Right, textBoxURLRight.Text, this.RightDownloader);
             MessageBox.Show("Внимание! Загрузка начнется через несколько секунд. Во время ожидания начала загрузки кнопки \"Стоп\" может не отвечать на клики.");
         }
+        //not awaiting async methods is SO wrong, but I don't think I can do anything about it
 
         private void buttonStopLeft_Click(object sender, RoutedEventArgs e)
         {

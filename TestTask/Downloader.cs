@@ -85,7 +85,7 @@ namespace TestTask
             return extension;
         }
 
-        public async Task<BitmapImage> DownloadImage(string url, string fileName)
+        public async Task<BitmapImage> DownloadImage(string url, string fileName)//it takes a few seconds before the download ACTUALLY starts
         {
             this.ExpectedSize = await this.GetContentLength(url);
             HttpRequestMessage get = new HttpRequestMessage(HttpMethod.Get, url);
