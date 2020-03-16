@@ -80,9 +80,9 @@ namespace TestTask
 
         private void buttonDownloadAll_Click(object sender, RoutedEventArgs e)
         {
-            //StartDownload(imageLeft, buttonStartLeft, buttonStopLeft, textBoxURLLeft, "Left", this.LeftDownloader);
-            //StartDownload(imageCenter, buttonStartCenter, buttonStopCenter, textBoxURLCenter, "Center", this.CenterDownloader);
-            //StartDownload(imageRight, buttonStartRight, buttonStopRight, textBoxURLRight, "Right", this.RightDownloader);
+            LeftReusable.StartDownload();
+            CenterReusable.StartDownload();
+            RightReusable.StartDownload();
         }
         //not awaiting async methods is SO wrong, but I don't think I can do anything about it
     }

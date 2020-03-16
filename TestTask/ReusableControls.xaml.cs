@@ -46,7 +46,7 @@ namespace TestTask
             this.ParentWindow.PreventNoURLDownloadAll();
         }
 
-        private async Task StartDownload(string fileName)
+        internal async Task StartDownload()
         {
 
             this.image.Source = null;
@@ -55,7 +55,7 @@ namespace TestTask
             this.buttonStart.IsEnabled = false;
             try
             {
-                this.image.Source = await this.Downloader.DownloadImage(this.textBoxURL.Text, fileName);
+                this.image.Source = await this.Downloader.DownloadImage(this.textBoxURL.Text, this.Name);
             }
             catch (Exception e)
             {
@@ -77,7 +77,7 @@ namespace TestTask
 
         private void buttonStart_Click(object sender, RoutedEventArgs e)
         {
-            this.StartDownload(this.Name);
+            StartDownload();
         }
     }
 }
