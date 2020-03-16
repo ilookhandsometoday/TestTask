@@ -1,0 +1,14 @@
+﻿<UserControl x:Class="TestTask.ReusableControls"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TestTask"
+             mc:Ignorable="d" Width="288.267" Height="497.112">
+    <Grid Margin="0,0,80,206.8">
+        <Image x:Name="image" HorizontalAlignment="Left" Height="200" Margin="6,5,0,0" VerticalAlignment="Top" Width="200"/>
+        <TextBox x:Name="textBoxURL" HorizontalAlignment="Left" Height="23" Margin="6,223,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" TextChanged="textBoxURL_TextChanged"/>
+        <Button x:Name="buttonStop" Content="Стоп" HorizontalAlignment="Left" Margin="131,269,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="buttonStop_Click"/>
+        <Button x:Name="buttonStart" Content="Старт" HorizontalAlignment="Left" Margin="6,269,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="buttonStart_Click"/>
+    </Grid>
+</UserControl>

@@ -70,73 +70,18 @@ namespace TestTask
             progressBar.Value = e.ProgressPercentage;
         }
 
-        private void PreventNoURLStart(TextBox textBox, Button startButton)
+        internal void PreventNoURLDownloadAll()
         {
-            startButton.IsEnabled = textBox.Text.Length != 0;
+            buttonDownloadAll.IsEnabled = LeftReusable.textBoxURL.Text.Length != 0 
+                && CenterReusable.textBoxURL.Text.Length != 0 
+                && RightReusable.textBoxURL.Text.Length != 0;
         }
 
-        private void PreventNoURLDownloadAll()
+        internal void PreventDownloadAllWhileDownloading() 
         {
-            buttonDownloadAll.IsEnabled = textBoxURLLeft.Text.Length != 0 && textBoxURLCenter.Text.Length != 0 && textBoxURLRight.Text.Length != 0;
-        }
-
-        private async Task StartDownload(Image image, Button startButton, Button stopButton, TextBox textBox, string fileName,Downloader downloader)
-        {
-
-            image.Source = null;
-            buttonDownloadAll.IsEnabled = false;
-            stopButton.IsEnabled = true;
-            startButton.IsEnabled = false;
-            try
-            {
-                image.Source = await downloader.DownloadImage(textBox.Text, fileName);
-            }
-            catch(Exception e)
-            {
-                MessageBox.Show(e.Message);
-                image.Source = null;
-            }
-
-            stopButton.IsEnabled = false;
-            startButton.IsEnabled = true;
-            buttonDownloadAll.IsEnabled = LeftDownloader.State == Downloader.States.AwaitingDownload &&
-            CenterDownloader.State == Downloader.States.AwaitingDownload &&
-            RightDownloader.State == Downloader.States.AwaitingDownload;
-            PreventNoURLStart(textBox, startButton );
-            PreventNoURLDownloadAll();
-        }
-
-        private void textBoxURLLeft_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            PreventNoURLStart(textBoxURLLeft, buttonStartLeft);
-            PreventNoURLDownloadAll();
-        }
-
-        private void textBoxURLCenter_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            PreventNoURLStart(textBoxURLCenter, buttonStartCenter);
-            PreventNoURLDownloadAll();
-        }
-
-        private void textBoxURLRight_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            PreventNoURLStart(textBoxURLRight, buttonStartRight);
-            PreventNoURLDownloadAll();
-        }
-
-        private void buttonStartLeft_Click(object sender, RoutedEventArgs e)
-        {
-            StartDownload(imageLeft, buttonStartLeft, buttonStopLeft, textBoxURLLeft, "Left",this.LeftDownloader);
-        }
-
-        private void buttonStartCenter_Click(object sender, RoutedEventArgs e)
-        {
-            StartDownload(imageCenter, buttonStartCenter, buttonStopCenter, textBoxURLCenter, "Center", this.CenterDownloader);
-        }
-
-        private void buttonStartRight_Click(object sender, RoutedEventArgs e)
-        {
-            StartDownload(imageRight, buttonStartRight, buttonStopRight, textBoxURLRight, "Right", this.RightDownloader);
+            this.buttonDownloadAll.IsEnabled = LeftReusable.Downloader.State == Downloader.States.AwaitingDownload &&
+           CenterReusable.Downloader.State == Downloader.States.AwaitingDownload &&
+           RightDownloader.State == Downloader.States.AwaitingDownload;
         }
 
         private void buttonDownloadAll_Click(object sender, RoutedEventArgs e)
@@ -146,20 +91,5 @@ namespace TestTask
             StartDownload(imageRight, buttonStartRight, buttonStopRight, textBoxURLRight, "Right", this.RightDownloader);
         }
         //not awaiting async methods is SO wrong, but I don't think I can do anything about it
-
-        private void buttonStopLeft_Click(object sender, RoutedEventArgs e)
-        {
-            LeftDownloader.StopDownload();
-        }
-
-        private void buttonStopCenter_Click(object sender, RoutedEventArgs e)
-        {
-            CenterDownloader.StopDownload();
-        }
-
-        private void buttonStopRight_Click(object sender, RoutedEventArgs e)
-        {
-            RightDownloader.StopDownload();
-        }
     }
 }
