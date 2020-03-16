@@ -22,17 +22,11 @@ namespace TestTask
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Downloader LeftDownloader;
-        private Downloader CenterDownloader;
-        private Downloader RightDownloader;
         private BackgroundWorker BackgroundWorker;
 
         public MainWindow()
         {
             InitializeComponent();
-            this.LeftDownloader = new Downloader();
-            this.CenterDownloader = new Downloader();
-            this.RightDownloader = new Downloader();
             this.BackgroundWorker = new BackgroundWorker();
             this.BackgroundWorker.WorkerReportsProgress = true;
             this.BackgroundWorker.DoWork += BackgroundWorker_DoWork;
@@ -47,18 +41,18 @@ namespace TestTask
             int percentageValue = 0;
             while (true)
             {
-                if (LeftDownloader.ExpectedSize != 0
-                || CenterDownloader.ExpectedSize != 0
-                || RightDownloader.ExpectedSize != 0)
+                if (LeftReusable.Downloader.ExpectedSize != 0
+                || CenterReusable.Downloader.ExpectedSize != 0
+                || RightReusable.Downloader.ExpectedSize != 0)
                 {
                     percentageValue = Convert.ToInt32
-                    ((LeftDownloader.CurrentSize
-                    + CenterDownloader.CurrentSize
-                    + RightDownloader.CurrentSize) 
+                    ((LeftReusable.Downloader.CurrentSize
+                    + CenterReusable.Downloader.CurrentSize
+                    + RightReusable.Downloader.CurrentSize) 
                     * 100L
-                    / (LeftDownloader.ExpectedSize
-                    + CenterDownloader.ExpectedSize
-                    + RightDownloader.ExpectedSize));
+                    / (LeftReusable.Downloader.ExpectedSize
+                    + CenterReusable.Downloader.ExpectedSize
+                    + RightReusable.Downloader.ExpectedSize));
                     this.BackgroundWorker.ReportProgress(percentageValue);
                     Thread.Sleep(700);
                 }
@@ -79,16 +73,16 @@ namespace TestTask
 
         internal void PreventDownloadAllWhileDownloading() 
         {
-            this.buttonDownloadAll.IsEnabled = LeftReusable.Downloader.State == Downloader.States.AwaitingDownload &&
+           this.buttonDownloadAll.IsEnabled = LeftReusable.Downloader.State == Downloader.States.AwaitingDownload &&
            CenterReusable.Downloader.State == Downloader.States.AwaitingDownload &&
-           RightDownloader.State == Downloader.States.AwaitingDownload;
+           RightReusable.Downloader.State == Downloader.States.AwaitingDownload;
         }
 
         private void buttonDownloadAll_Click(object sender, RoutedEventArgs e)
         {
-            StartDownload(imageLeft, buttonStartLeft, buttonStopLeft, textBoxURLLeft, "Left", this.LeftDownloader);
-            StartDownload(imageCenter, buttonStartCenter, buttonStopCenter, textBoxURLCenter, "Center", this.CenterDownloader);
-            StartDownload(imageRight, buttonStartRight, buttonStopRight, textBoxURLRight, "Right", this.RightDownloader);
+            //StartDownload(imageLeft, buttonStartLeft, buttonStopLeft, textBoxURLLeft, "Left", this.LeftDownloader);
+            //StartDownload(imageCenter, buttonStartCenter, buttonStopCenter, textBoxURLCenter, "Center", this.CenterDownloader);
+            //StartDownload(imageRight, buttonStartRight, buttonStopRight, textBoxURLRight, "Right", this.RightDownloader);
         }
         //not awaiting async methods is SO wrong, but I don't think I can do anything about it
     }

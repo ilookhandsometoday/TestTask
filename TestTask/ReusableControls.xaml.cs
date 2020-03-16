@@ -26,7 +26,13 @@ namespace TestTask
         {
             InitializeComponent();
             this.Downloader = new Downloader();
-            this.ParentWindow = (MainWindow)Window.GetWindow(this);
+            this.Loaded += OnLoaded;
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e) 
+        {
+            this.ParentWindow = Window.GetWindow(this) as MainWindow;
+            this.Loaded -= OnLoaded;
         }
 
         private void PreventNoURLStart() 
@@ -59,7 +65,7 @@ namespace TestTask
 
             this.buttonStop.IsEnabled = false;
             this.buttonStart.IsEnabled = true;
-            PreventNoURLStart();
+            this.PreventNoURLStart();
             this.ParentWindow.PreventDownloadAllWhileDownloading();
             this.ParentWindow.PreventNoURLDownloadAll();
         }
