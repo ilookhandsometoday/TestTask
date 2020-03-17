@@ -27,12 +27,13 @@ namespace TestTask
         public MainWindow()
         {
             InitializeComponent();
-            this.BackgroundWorker = new BackgroundWorker();
-            this.BackgroundWorker.WorkerReportsProgress = true;
+            this.BackgroundWorker = new BackgroundWorker
+            {
+                WorkerReportsProgress = true
+            };
+
             this.BackgroundWorker.DoWork += BackgroundWorker_DoWork;
             this.BackgroundWorker.ProgressChanged += BackgroundWorker_ProgressChanged;
-            MessageBox.Show("Внимание! После нажатия кнопки \"Старт\"  или \"Загрузить всё\" проходит несколько секунд " +
-                "прежде чем загрузка действительно начнется. В это время кнопки \"Стоп\" будут неотзывчивыми");
             this.BackgroundWorker.RunWorkerAsync();
         }
 
